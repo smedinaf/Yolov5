@@ -7,35 +7,88 @@ import torch
 
 # CONFIG
 st.set_page_config(
-    page_title="AI Object Detection",
-    page_icon="🎯",
+    page_title="Pink AI Object Detection",
+    page_icon="💖",
     layout="wide"
 )
 
-# CSS PERSONALIZADO
+# 🎨 ESTILOS ROSADOS
 st.markdown("""
 <style>
+
+/* FONDO GENERAL */
 .main {
-    background: linear-gradient(135deg, #0f172a, #1e293b);
-    color: white;
+    background: linear-gradient(135deg, #ffe4ec, #fff1f5);
+    color: #4b2e2e;
 }
-h1, h2, h3 {
-    color: #f8fafc;
-}
-.stButton>button {
-    background: #22c55e;
-    color: white;
-    border-radius: 10px;
-}
+
+/* CONTENEDOR */
 .block-container {
     padding-top: 2rem;
 }
+
+/* TITULOS */
+h1, h2, h3 {
+    color: #b83280;
+    font-weight: 600;
+}
+
+/* TEXTO */
+p, label, span {
+    color: #6b4c4c;
+}
+
+/* SIDEBAR */
+section[data-testid="stSidebar"] {
+    background: #fff0f6;
+}
+
+section[data-testid="stSidebar"] * {
+    color: #b83280 !important;
+}
+
+/* BOTONES */
+.stButton>button {
+    background: linear-gradient(90deg, #ff8fab, #ffb3c6);
+    color: white;
+    border-radius: 12px;
+    border: none;
+    padding: 10px 20px;
+    transition: 0.3s;
+}
+
+.stButton>button:hover {
+    background: linear-gradient(90deg, #ff6f91, #ff9bb3);
+    transform: scale(1.03);
+}
+
+/* CARDS */
 .card {
-    background: #1e293b;
+    background: #ffffff;
     padding: 20px;
-    border-radius: 15px;
+    border-radius: 20px;
+    box-shadow: 0px 4px 20px rgba(255, 182, 193, 0.4);
     margin-bottom: 10px;
 }
+
+/* DATAFRAME */
+[data-testid="stDataFrame"] {
+    background: white;
+    border-radius: 15px;
+}
+
+/* METRICS */
+[data-testid="stMetric"] {
+    background: #ffe4ec;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+/* ALERTAS */
+.stAlert {
+    border-radius: 12px;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -51,8 +104,8 @@ def load_model():
         return None
 
 # HEADER
-st.markdown("## 🎯 AI Object Detection")
-st.caption("Detecta objetos en tiempo real usando YOLOv5 🚀")
+st.markdown("## 💖 Pink AI Object Detection")
+st.caption("Detecta objetos con estilo ✨🌸")
 
 # LOAD MODEL
 with st.spinner("Cargando modelo..."):
@@ -78,12 +131,16 @@ if model:
         np_img  = np.array(pil_img)[..., ::-1]
 
         with st.spinner("🔍 Analizando imagen..."):
-            results = model(
-                np_img,
-                conf=conf_threshold,
-                iou=iou_threshold,
-                max_det=int(max_det)
-            )
+            try:
+                results = model(
+                    np_img,
+                    conf=conf_threshold,
+                    iou=iou_threshold,
+                    max_det=int(max_det)
+                )
+            except Exception as e:
+                st.error(f"Error durante la detección: {str(e)}")
+                st.stop()
 
         result    = results[0]
         boxes     = result.boxes
@@ -114,7 +171,7 @@ if model:
 
                 total_objects = sum(category_count.values())
 
-                # MÉTRICAS
+                # MÉTRICA
                 st.metric("Objetos detectados", total_objects)
 
                 # DATA
@@ -140,6 +197,10 @@ if model:
 
 else:
     st.error("❌ No se pudo cargar el modelo")
+    st.stop()
+
+st.markdown("---")
+st.caption("💖 Hecho con Streamlit + YOLOv5")
     st.stop()
 
 st.markdown("---")
