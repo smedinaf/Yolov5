@@ -197,7 +197,7 @@ if model:
 
 else:
     st.error("❌ No se pudo cargar el modelo")
-       st.stop()
+     st.stop()
 
 st.markdown("---")
 st.caption("💖 Hecho con Streamlit + YOLOv5")
